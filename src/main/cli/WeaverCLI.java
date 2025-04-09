@@ -133,6 +133,25 @@ public class WeaverCLI {
             }
         }
     }
+    /**
+     * Helper method: Asks the user a yes/no question and returns a boolean result.
+     * @param scanner The Scanner object for reading user input.
+     * @param question The question string to ask the user.
+     * @return True if the user enters 'y', false if the user enters 'n'.
+     */
+    private static boolean askYesNo(Scanner scanner, String question) {
+        while (true) {
+            System.out.print(question);
+            String input = scanner.nextLine().trim().toLowerCase();
+            if (input.equals("y")) {
+                return true;
+            } else if (input.equals("n")) {
+                return false;
+            } else {
+                System.out.println("Invalid input. Please enter 'y' or 'n'.");
+            }
+        }
+    }
 
 
 }
