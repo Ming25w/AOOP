@@ -27,7 +27,32 @@ public class WeaverController {
         }
     }
 
+    public void handleBackspace() {
+        if (currentInput.length() > 0) {
+            currentInput.setLength(currentInput.length() - 1);
+            view.updateCurrentInput(currentInput.toString());
+        }
+    }
 
+    public void handleEnter() {
+        if (currentInput.length() == MAX_WORD_LENGTH) {
+            String word = currentInput.toString();
+            if (!model.processInput(word) && model.getShowErrorMessage()) {
+                JOptionPane.showMessageDialog(view,
+                    "Invalid word! Must be in dictionary and differ by one letter.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+            currentInput.setLength(0);
+            view.updateCurrentInput("");
+        }
+    }
+
+    public void handleReset() {
+        model.resetGame();
+        currentInput.setLength(0);
+        view.updateCurrentInput("");
+    }
 
 
 
