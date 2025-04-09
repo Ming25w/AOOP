@@ -133,6 +133,7 @@ public class WeaverCLI {
             }
         }
     }
+
     /**
      * Helper method: Asks the user a yes/no question and returns a boolean result.
      * @param scanner The Scanner object for reading user input.
@@ -153,5 +154,23 @@ public class WeaverCLI {
         }
     }
 
-
+    /**
+     * Helper method: Displays a word using ANSI color codes based on LetterStatus array.
+     * Colors letters based on correctness relative to the target word.
+     * @param word The word to display.
+     * @param statuses Array of LetterStatus for each letter (CORRECT_POSITION/INCORRECT).
+     */
+    private static void displayWordWithColors(String word, LetterStatus[] statuses) {
+        // Check input validity
+        if (word == null || statuses == null || word.length() != statuses.length) {
+            System.out.println(word); // Print word without colors if input is invalid
+            return;
+        }
+        for (int i = 0; i < word.length(); i++) {
+            // Choose color based on letter status: Green for correct position, otherwise Gray
+            String color = statuses[i] == LetterStatus.CORRECT_POSITION ? ANSI_GREEN : ANSI_GRAY;
+            System.out.print(color + word.charAt(i) + ANSI_RESET);
+        }
+        System.out.println(); // Newline after the word
+    }
 }
