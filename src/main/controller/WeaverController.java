@@ -54,7 +54,11 @@ public class WeaverController {
         view.updateCurrentInput("");
     }
 
-
+    public void handleNewGame() {
+        model.newGame();
+        currentInput.setLength(0);
+        view.updateCurrentInput("");
+    }
 
 
 } 
