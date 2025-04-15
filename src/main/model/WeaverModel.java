@@ -153,7 +153,22 @@ public class WeaverModel extends Observable implements WeaverModelInterface {
         notifyObservers();
     }
 
+    @Override
+    public void loadDictionary(String filePath) throws IOException {
+        assert filePath != null && !filePath.isEmpty() : "File path cannot be null or empty for loading dictionary";
+        dictionary = Files.lines(Paths.get(filePath))
+                .map(String::toLowerCase)
+                .filter(word -> word.length() == 4)
+                .collect(Collectors.toSet());
 
+        if (dictionary.isEmpty()) {
+            // This exception is good, assertion not strictly needed before it,
+            // but can be added for internal consistency if desired before the throw.
+            // assert !dictionary.isEmpty() : "Dictionary should not be empty after loading if file was valid and contained 4-letter words";
+            throw new IOException("No 4-letter words found in dictionary, or dictionary file is empty/invalid.");
+        }
+        assert !dictionary.isEmpty() : "Dictionary must not be empty after successful loading and filtering.";
+    }
 
 
 
