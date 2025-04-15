@@ -60,5 +60,15 @@ public class WeaverController {
         view.updateCurrentInput("");
     }
 
+    public void handleToggleShowError(boolean show) {
+        model.setShowErrorMessage(show);
+    }
 
+    public void handleToggleShowPath(boolean show) {
+        model.setShowPath(show);
+    }
+
+    public void handleToggleRandomWords(boolean random) {
+        model.setRandomWords(random);
+    }
 } 
