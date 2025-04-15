@@ -170,6 +170,45 @@ public class WeaverModel extends Observable implements WeaverModelInterface {
         assert !dictionary.isEmpty() : "Dictionary must not be empty after successful loading and filtering.";
     }
 
+    @Override
+    public LetterStatus[] getGuessResult(String guess) {
+        assert guess != null && guess.length() == 4 : "Guess must be non-null and 4 letters long";
+        assert endWord != null && endWord.length() == 4 : "End word must be initialized and 4 letters for getGuessResult";
+
+        LetterStatus[] result = new LetterStatus[4];
+        for (int i = 0; i < 4; i++) {
+            result[i] = guess.charAt(i) == endWord.charAt(i) ?
+                    LetterStatus.CORRECT_POSITION :
+                    LetterStatus.INCORRECT;
+        }
+        return result;
+    }
+
+    private boolean isValidWord(String word) {
+        // Word parameter validity (non-null, 4 letters) should be ensured by caller (processInput)
+        assert word != null && word.length() == 4 : "Word to validate must be non-null and 4 letters";
+        assert dictionary != null : "Dictionary must be initialized for isValidWord check";
+        assert getCurrentWord() != null && getCurrentWord().length() == 4 : "Current game word must be valid for isValidWord check";
+
+        if (!dictionary.contains(word)) {
+            // Error logging/display is handled by view/controller based on showErrorMessage flag
+            return false;
+        }
+
+        String currentWordInternal = getCurrentWord(); // Use internal reference
+        int differences = 0;
+        for (int i = 0; i < 4; i++) {
+            if (currentWordInternal.charAt(i) != word.charAt(i)) {
+                differences++;
+            }
+        }
+
+        if (differences != 1) {
+            // Error logging/display is handled by view/controller
+            return false;
+        }
+        return true;
+    }
 
 
 
