@@ -210,7 +210,20 @@ public class WeaverModel extends Observable implements WeaverModelInterface {
         return true;
     }
 
+    // Setters and Getters for flags usually don't need complex assertions
+    // unless they interact with other state in a complex way.
 
+    @Override
+    public void setShowErrorMessage(boolean show) {
+        this.showErrorMessage = show;
+        setChanged();
+        notifyObservers();
+    }
+
+    @Override
+    public boolean getShowErrorMessage() {
+        return showErrorMessage;
+    }
 
 
 
