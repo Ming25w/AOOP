@@ -225,7 +225,24 @@ public class WeaverModel extends Observable implements WeaverModelInterface {
         return showErrorMessage;
     }
 
+    @Override
+    public void setShowPath(boolean show) {
+        this.showPath = show;
+        setChanged();
+        notifyObservers();
+    }
 
+    @Override
+    public boolean getShowPath() {
+        return showPath;
+    }
+
+    @Override
+    public void setRandomWords(boolean random) {
+        this.randomWords = random;
+        setChanged();
+        notifyObservers();
+    }
 
 
 
