@@ -244,7 +244,20 @@ public class WeaverModel extends Observable implements WeaverModelInterface {
         notifyObservers();
     }
 
+    @Override
+    public boolean getRandomWords() {
+        return randomWords;
+    }
 
+    @Override
+    public List<String> getSolutionPath() {
+        assert startWord != null && startWord.length() == 4 : "Start word must be initialized for getSolutionPath";
+        assert endWord != null && endWord.length() == 4 : "End word must be initialized for getSolutionPath";
+        assert dictionary != null && !dictionary.isEmpty() : "Dictionary must be loaded and non-empty for getSolutionPath";
+        // It's possible startWord or endWord are not in dictionary if newGame had issues with fixed words and a bad dictionary.
+        // findWordLadder handles this gracefully by returning emptyList.
+        return findWordLadder(startWord, endWord);
+    }
 
 
 }
