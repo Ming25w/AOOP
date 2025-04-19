@@ -259,5 +259,82 @@ public class WeaverModel extends Observable implements WeaverModelInterface {
         return findWordLadder(startWord, endWord);
     }
 
+    private List<String> findWordLadder(String start, String end) {
+        assert start != null : "Start word parameter for findWordLadder cannot be null";
+        assert end != null : "End word parameter for findWordLadder cannot be null";
+        // Length check and dictionary presence are handled by the method's logic,
+        // as this method is used exploratively by newGame.
+        assert dictionary != null : "Dictionary must be initialized for findWordLadder";
 
+
+        // Basic validation (runtime checks, not assertions as this method can be called with words not in dictionary by newGame)
+        if (start.length() != 4 || end.length() != 4 || !dictionary.contains(start) || !dictionary.contains(end)) {
+            // If start or end has wrong length, or not in dictionary, no path.
+            if (start.equals(end) && start.length() == 4 && dictionary.contains(start)) { // Path from a word to itself
+                return Collections.singletonList(start);
+            }
+            return Collections.emptyList();
+        }
+        if (start.equals(end)) { // Path from a word to itself
+            return Collections.singletonList(start);
+        }
+
+
+        Queue<String> queue = new LinkedList<>();
+        Map<String, String> parentMap = new HashMap<>();
+        Set<String> visited = new HashSet<>();
+
+        queue.offer(start);
+        visited.add(start);
+        parentMap.put(start, null);
+
+        while (!queue.isEmpty()) {
+            String currentWord = queue.poll();
+
+            if (currentWord.equals(end)) {
+                List<String> path = new LinkedList<>();
+                String step = end;
+                while (step != null) {
+                    path.add(0, step);
+                    step = parentMap.get(step);
+                }
+                assert !path.isEmpty() : "Path reconstruction should not result in an empty list if end is found";
+                assert path.get(0).equals(start) : "Reconstructed path must start with the start word";
+                assert path.get(path.size() - 1).equals(end) : "Reconstructed path must end with the end word";
+                return path;
+            }
+
+            List<String> neighbors = getNeighbors(currentWord);
+            for (String neighbor : neighbors) {
+                if (!visited.contains(neighbor) && dictionary.contains(neighbor)) { // Neighbor must be in dictionary
+                    visited.add(neighbor);
+                    parentMap.put(neighbor, currentWord);
+                    queue.offer(neighbor);
+                }
+            }
+        }
+        return Collections.emptyList(); // No path found
+    }
+
+    private List<String> getNeighbors(String word) {
+        assert word != null && word.length() == 4 : "Word parameter for getNeighbors must be non-null and 4 letters";
+        assert dictionary != null : "Dictionary must be initialized for getNeighbors";
+
+        List<String> neighbors = new ArrayList<>();
+        char[] chars = word.toCharArray();
+
+        for (int i = 0; i < chars.length; i++) {
+            char originalChar = chars[i];
+            for (char c = 'a'; c <= 'z'; c++) {
+                if (c == originalChar) continue;
+                chars[i] = c;
+                String neighbor = new String(chars);
+                if (dictionary.contains(neighbor)) {
+                    neighbors.add(neighbor);
+                }
+            }
+            chars[i] = originalChar;
+        }
+        return neighbors;
+    }
 }
